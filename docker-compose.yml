@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  lpmd-runner:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./examples:/app/examples
+      - ./docs:/app/docs
+    environment:
+      - FLASK_ENV=production

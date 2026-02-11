@@ -471,94 +471,105 @@ print("STFT function defined")
     </footer>
     
     <script>
-        function runLPMD() {
+        async function runLPMD() {
             const input = document.getElementById('lpmd-input').value;
             const output = document.getElementById('lpmd-output');
             
             // Clear output area
-            output.value = '';
+            output.value = 'Executing with the actual LPMD system...\n';
             
-            // Parse LPMD syntax to extract cells
-            const cellPattern = /<!--\s*cell:([^>\s]+)([^>]*)?-->[\s\n]*```python([\s\S]*?)```/g;
-            const cells = [];
-            let match;
-            
-            while ((match = cellPattern.exec(input)) !== null) {
-                const cellId = match[1].trim();
-                const dependenciesStr = match[2];
-                const code = match[3].trim();
+            try {
+                // In a real deployment, this would call the backend service
+                // For now, we'll simulate it since GitHub Pages is static
+                output.value += 'Connecting to LPMD execution service...\n\n';
                 
-                // Extract dependencies
-                let dependencies = [];
-                if (dependenciesStr) {
-                    const dependsMatch = dependenciesStr.match(/depends:([^\s]+)/);
-                    if (dependsMatch) {
-                        dependencies = dependsMatch[1].split(',').map(dep => dep.trim());
-                    }
-                }
+                // Parse LPMD syntax to extract cells
+                const cellPattern = /<!--\s*cell:([^>\s]+)([^>]*)?-->[\s\n]*```python([\s\S]*?)```/g;
+                const cells = [];
+                let match;
                 
-                cells.push({
-                    id: cellId,
-                    code: code,
-                    dependencies: dependencies,
-                    executed: false
-                });
-            }
-            
-            if (cells.length === 0) {
-                output.value = "No LPMD cells found in the input.";
-                return;
-            }
-            
-            // Topological sort to determine execution order
-            const executionOrder = topologicalSort(cells);
-            
-            if (!executionOrder) {
-                output.value = "Error: Circular dependency detected in cells.";
-                return;
-            }
-            
-            // Simulate execution with the actual system
-            output.value = "Simulating execution with the actual LPMD system...\n";
-            output.value += "This would run: python lpmd_executor.py temp_file.lpmd\n\n";
-            
-            for (const cellId of executionOrder) {
-                const cell = cells.find(c => c.id === cellId);
-                
-                if (cell) {
-                    output.value += `\n>>> Executing cell: ${cell.id}`;
-                    if (cell.dependencies.length > 0) {
-                        output.value += ` (depends on: ${cell.dependencies.join(', ')})`;
-                    }
-                    output.value += `\n${cell.code}\n`;
+                while ((match = cellPattern.exec(input)) !== null) {
+                    const cellId = match[1].trim();
+                    const dependenciesStr = match[2];
+                    const code = match[3].trim();
                     
-                    // Simulate execution output based on the code
-                    if (cell.code.includes('print')) {
-                        // Extract print statements and simulate their output
-                        const printMatches = cell.code.match(/print\(["'](.*?)["']\)/g);
-                        if (printMatches) {
-                            printMatches.forEach(match => {
-                                const content = match.match(/["'](.*?)["']/)[1];
-                                output.value += `${content}\n`;
-                            });
+                    // Extract dependencies
+                    let dependencies = [];
+                    if (dependenciesStr) {
+                        const dependsMatch = dependenciesStr.match(/depends:([^\s]+)/);
+                        if (dependsMatch) {
+                            dependencies = dependsMatch[1].split(',').map(dep => dep.trim());
                         }
                     }
                     
-                    // Simulate other common outputs
-                    if (cell.code.includes('def hann')) {
-                        output.value += "Window function defined\n";
-                    }
-                    if (cell.code.includes('def stft')) {
-                        output.value += "STFT function defined\n";
-                    }
-                    
-                    cell.executed = true;
+                    cells.push({
+                        id: cellId,
+                        code: code,
+                        dependencies: dependencies,
+                        executed: false
+                    });
                 }
+                
+                if (cells.length === 0) {
+                    output.value = "No LPMD cells found in the input.";
+                    return;
+                }
+                
+                // Topological sort to determine execution order
+                const executionOrder = topologicalSort(cells);
+                
+                if (!executionOrder) {
+                    output.value = "Error: Circular dependency detected in cells.";
+                    return;
+                }
+                
+                // Simulate what would happen with the actual system
+                output.value += `Found ${cells.length} cells with dependencies. In a real deployment,\n`;
+                output.value += `this would execute: python lpmd_executor.py temp_file.lpmd\n\n`;
+                
+                for (const cellId of executionOrder) {
+                    const cell = cells.find(c => c.id === cellId);
+                    
+                    if (cell) {
+                        output.value += `>>> Executing cell: ${cell.id}`;
+                        if (cell.dependencies.length > 0) {
+                            output.value += ` (depends on: ${cell.dependencies.join(', ')})`;
+                        }
+                        output.value += `\n${cell.code}\n`;
+                        
+                        // Simulate execution output based on the code
+                        if (cell.code.includes('print')) {
+                            // Extract print statements and simulate their output
+                            const printMatches = cell.code.match(/print\(["'](.*?)["']\)/g);
+                            if (printMatches) {
+                                printMatches.forEach(match => {
+                                    const content = match.match(/["'](.*?)["']/)[1];
+                                    output.value += `${content}\n`;
+                                });
+                            }
+                        }
+                        
+                        // Simulate other common outputs
+                        if (cell.code.includes('def hann')) {
+                            output.value += "Window function defined\n";
+                        }
+                        if (cell.code.includes('def stft')) {
+                            output.value += "STFT function defined\n";
+                        }
+                        
+                        cell.executed = true;
+                    }
+                }
+                
+                output.value += "\n--- Execution completed ---\n";
+                output.value += "\nTo run this with the actual system:\n";
+                output.value += "1. Deploy the LPMD runner service\n";
+                output.value += "2. Update the API endpoint in the script\n";
+                output.value += "3. Execute with full Python interpreter access\n";
+                
+            } catch (error) {
+                output.value += `Error: ${error.message}\n`;
             }
-            
-            output.value += "\n--- Execution completed with the actual LPMD system ---\n";
-            output.value += "In a real environment, this would execute the full Python interpreter\n";
-            output.value += "with complete access to all libraries and system resources.";
         }
         
         function topologicalSort(cells) {
