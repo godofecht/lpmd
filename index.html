@@ -463,6 +463,84 @@ print("STFT function defined")
         </div>
     </section>
     
+    <section class="syntax-section">
+        <div class="container">
+            <h2>Why LPMD Instead of Jupyter/Colab?</h2>
+            
+            <p>While Jupyter and Colab are popular tools, they have fundamental limitations that make them unsuitable for true literate programming:</p>
+            
+            <h3>Major Issues with Jupyter/Colab</h3>
+            <div class="syntax-grid">
+                <div class="syntax-card">
+                    <h3>Hidden State</h3>
+                    <p>Jupyter notebooks maintain mutable kernel state. Cell execution order affects results, making notebooks non-reproducible. You can run cells in any order, leading to inconsistent states that are hard to reproduce.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Non-Deterministic Execution</h3>
+                    <p>Results depend on execution history. A cell that worked yesterday might fail today if previous cells were modified or skipped. This makes debugging and verification difficult.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Linear Narrative</h3>
+                    <p>Notebooks force a top-down narrative that may not match the logical flow of ideas. The presentation order is tied to execution order, limiting pedagogical flexibility.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Version Control Problems</h3>
+                    <p>Notebooks contain binary outputs mixed with code, causing massive diffs in version control. Collaboration becomes difficult as output changes clutter commits.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Hidden Dependencies</h3>
+                    <p>Cells often rely on variables from other cells without explicit declaration. This creates fragile dependencies that break silently when cells are reordered or deleted.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Not Real Programs</h3>
+                    <p>Notebooks are not directly executable as programs. Converting to scripts requires manual extraction and reorganization, often breaking the logical flow.</p>
+                </div>
+            </div>
+            
+            <h3>LPMD Advantages</h3>
+            <ul>
+                <li><strong>Explicit Dependencies</strong>: Every dependency is declared, preventing hidden state issues</li>
+                <li><strong>Deterministic Execution</strong>: Same inputs always produce same outputs, regardless of execution history</li>
+                <li><strong>Flexible Narrative</strong>: Narrative order is independent of execution order</li>
+                <li><strong>Version Control Friendly</strong>: Clean text-based format without binary outputs</li>
+                <li><strong>Derivable Programs</strong>: Clean Python scripts can be extracted for deployment</li>
+                <li><strong>True Literate Programming</strong>: Document is primary, code is derived</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section class="syntax-section">
+        <div class="container">
+            <h2>Language Agnostic Architecture</h2>
+            
+            <p>LPMD's architecture is designed to be language-agnostic, making it easy to extend to other programming languages:</p>
+            
+            <div class="syntax-grid">
+                <div class="syntax-card">
+                    <h3>Current Implementation</h3>
+                    <p>Currently focused on Python, but the architecture supports any language with an interpreter.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Extensibility</h3>
+                    <p>New language support requires only a parser and executor for that language, following the same dependency resolution patterns.</p>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Future Languages</h3>
+                    <p>Potential for JavaScript, Rust, Go, Julia, R, or any language that benefits from literate programming principles.</p>
+                </div>
+            </div>
+            
+            <p>This flexibility means that as better ecosystems emerge, LPMD can seamlessly adopt them while maintaining the same literate programming principles.</p>
+        </div>
+    </section>
+    
     <footer>
         <div class="container">
             <p>Literate Python Markdown (LPMD) | Licensed under MIT</p>
