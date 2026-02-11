@@ -172,6 +172,22 @@
             color: var(--primary-color);
         }
         
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #f2f2f2;
+        }
+        
         footer {
             background-color: var(--primary-color);
             color: white;
@@ -202,6 +218,7 @@
             <nav>
                 <div class="logo">LPMD</div>
                 <ul>
+                    <li><a href="#philosophy">Philosophy</a></li>
                     <li><a href="#syntax">Syntax</a></li>
                     <li><a href="#runner">Runner</a></li>
                     <li><a href="https://github.com/godofecht/lpmd">GitHub</a></li>
@@ -213,15 +230,114 @@
     <section class="intro">
         <div class="container">
             <h1>Literate Python Markdown (LPMD)</h1>
-            <p>LPMD is a technology that allows executable Python code in markdown files. Unlike traditional literate programming that only displays code, LPMD actually runs your markdown documents as executable programs.</p>
-            <p>LPMD uses special cell markers to define executable code blocks with dependency management.</p>
+            <p>LPMD is a literate programming system where the document is primary and the runnable Python script is derived. It follows the tradition of Knuth's WEB and noweb systems, where code blocks are named and expanded in dependency order.</p>
+            <p>Unlike notebooks, LPMD produces deterministic output with no hidden state. The narrative order is chosen for human understanding, not execution order.</p>
+        </div>
+    </section>
+    
+    <section id="philosophy" class="syntax-section">
+        <div class="container">
+            <h2>Literate Programming Philosophy</h2>
+            <p>An ideal Python literate program is not a notebook. It is a single narrative document that <em>derives</em> runnable Python. The document is primary. The script is generated.</p>
+            
+            <h3>Key Principles</h3>
+            <ol>
+                <li>The narrative order is chosen for human understanding</li>
+                <li>Code chunks are named and reusable</li>
+                <li>Tangling generates a <code>.py</code> file in dependency order</li>
+                <li>No hidden state exists outside what is shown</li>
+                <li>Running the generated script yields identical behavior every time</li>
+            </ol>
+            
+            <h3>Comparison with Notebooks</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Literate Programming (LPMD)</th>
+                        <th>Notebook (Jupyter)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Primary artifact</td>
+                        <td>Document with narrative</td>
+                        <td>Executable cells</td>
+                    </tr>
+                    <tr>
+                        <td>Execution model</td>
+                        <td>Deterministic, dependency-ordered</td>
+                        <td>Interactive, cell-by-cell</td>
+                    </tr>
+                    <td>State management</td>
+                    <td>No hidden state</td>
+                    <td>Mutable kernel state</td>
+                    </tr>
+                    <tr>
+                        <td>Output reproducibility</td>
+                        <td>Identical every time</td>
+                        <td>Depends on execution history</td>
+                    </tr>
+                    <tr>
+                        <td>Document structure</td>
+                        <td>Narrative-driven</td>
+                        <td>Linear execution flow</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Example: Spectral Envelope Estimation</h3>
+            <p>Here's how a literate program might look:</p>
+            <div class="code-block">
+                ---<br>
+                Title: Spectral Envelope Estimation in Real-Time<br>
+                ---<br><br>
+                
+                We begin by defining the signal model. The input signal is assumed to be stationary over a short window and represented as a discrete sequence x[n].<br><br>
+                
+                We require a window function:<br><br>
+                
+                ```python<br>
+                def hann(N: int) -> np.ndarray:<br>
+                    return 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(N) / N)<br>
+                ```<br><br>
+                
+                Next we define the STFT. The important property is overlap-add consistency.<br><br>
+                
+                ```python<br>
+                def stft(x: np.ndarray, N: int, hop: int) -> np.ndarray:<br>
+                    w = hann(N)<br>
+                    frames = []<br>
+                    for i in range(0, len(x) - N, hop):<br>
+                        frames.append(np.fft.rfft(x[i:i+N] * w))<br>
+                    return np.stack(frames)<br>
+                ```<br><br>
+                
+                We now define the envelope estimator…<br><br>
+                
+                ```python<br>
+                def spectral_envelope(X: np.ndarray) -> np.ndarray:<br>
+                    return np.abs(X).mean(axis=0)<br>
+                ```<br><br>
+                
+                Finally, we provide a CLI entry point:<br><br>
+                
+                ```python<br>
+                if __name__ == "__main__":<br>
+                    import soundfile as sf<br>
+                    x, sr = sf.read("input.wav")<br>
+                    X = stft(x, 2048, 512)<br>
+                    env = spectral_envelope(X)<br>
+                    print(env)<br>
+                ```<br>
+            </div>
         </div>
     </section>
     
     <section id="syntax" class="syntax-section">
         <div class="container">
             <h2>LPMD Syntax</h2>
-            <p>LPMD uses HTML comments as cell markers to keep the markdown readable while enabling execution:</p>
+            <p>LPMD uses HTML comments as cell markers to keep the markdown readable while enabling execution. These markers allow for dependency management similar to noweb's named chunks:</p>
             
             <div class="syntax-grid">
                 <div class="syntax-card">
@@ -247,11 +363,12 @@
                 </div>
                 
                 <div class="syntax-card">
-                    <h3>Cell with Persistence</h3>
+                    <h3>Reusable Code Block</h3>
                     <div class="code-block">
-                        &lt;!-- cell:process depends:load persist:data --&gt;<br>
+                        &lt;!-- cell:window-function --&gt;<br>
                         ```python<br>
-                        processed_data = transform(data)<br>
+                        def hann(N):<br>
+                            return 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(N) / N)<br>
                         ```<br>
                     </div>
                 </div>
@@ -261,8 +378,9 @@
             <ul>
                 <li><code>cell_id</code>: Unique identifier for the cell</li>
                 <li><code>depends</code>: Comma-separated list of cells this cell depends on</li>
-                <li><code>persist</code>: Variables to explicitly persist (optional)</li>
             </ul>
+            
+            <p>During execution, LPMD resolves dependencies using topological sorting, ensuring that code blocks are evaluated in the correct order regardless of their position in the narrative.</p>
         </div>
     </section>
     
@@ -274,22 +392,24 @@
             <div class="runner-container">
                 <div class="input-area">
                     <label for="lpmd-input"><strong>Your LPMD Code:</strong></label>
-                    <textarea id="lpmd-input" placeholder="Enter your LPMD code here..."><!-- cell:setup -->
+                    <textarea id="lpmd-input" placeholder="Enter your LPMD code here..."><!-- cell:window-function -->
 ```python
-print("Hello from LPMD!")
-x = 10
-y = 20
+def hann(N):
+    return 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(N) / N)
+
+print("Window function defined")
 ```
 
-<!-- cell:compute depends:setup -->
+<!-- cell:stft depends:window-function -->
 ```python
-result = x + y
-print(f"Sum: {result}")
-```
+def stft(x, N, hop):
+    w = hann(N)
+    frames = []
+    for i in range(0, len(x) - N, hop):
+        frames.append(np.fft.rfft(x[i:i+N] * w))
+    return np.stack(frames)
 
-<!-- cell:display depends:compute -->
-```python
-print(f"The final result is: {result}")
+print("STFT function defined")
 ```</textarea>
                 </div>
                 
@@ -330,14 +450,16 @@ print(f"The final result is: {result}")
                 </div>
             </div>
             
-            <h3 style="margin-top: 1.5rem;">Execution Process</h3>
+            <h3 style="margin-top: 1.5rem;">Workflow</h3>
             <ol>
-                <li>LPMD parses the file to identify cells and their dependencies</li>
-                <li>It resolves execution order using topological sorting</li>
-                <li>Cells are executed in dependency order</li>
-                <li>Variables are shared between dependent cells</li>
-                <li>Output is displayed as the code executes</li>
+                <li>Write your narrative document with named code blocks</li>
+                <li>Specify dependencies between blocks using the <code>depends</code> parameter</li>
+                <li>LPMD resolves execution order using topological sorting</li>
+                <li>Execute the document to verify correctness</li>
+                <li>Generate clean Python script for deployment</li>
             </ol>
+            
+            <p>This workflow ensures that your code is both well-documented and functionally correct, following the true spirit of literate programming.</p>
         </div>
     </section>
     
@@ -359,15 +481,14 @@ print(f"The final result is: {result}")
             output.value += "In a real environment, this would:\n";
             output.value += "1. Parse the LPMD syntax\n";
             output.value += "2. Identify cells and dependencies\n";
-            output.value += "3. Execute cells in dependency order\n";
+            output.value += "3. Execute cells in dependency order (window-function before stft)\n";
             output.value += "4. Return the output of each cell\n\n";
             
             // Simulate the expected output based on the default example
-            if (input.includes("Hello from LPMD!")) {
+            if (input.includes("window-function")) {
                 output.value += "Actual expected output would be:\n";
-                output.value += "Hello from LPMD!\n";
-                output.value += "Sum: 30\n";
-                output.value += "The final result is: 30\n";
+                output.value += "Window function defined\n";
+                output.value += "STFT function defined\n";
             } else {
                 output.value += "Enter LPMD code to see simulated execution.";
             }
