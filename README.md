@@ -216,32 +216,18 @@ LitPro can be embedded directly in websites and blogs:
 </script>
 ```
 
-## Language Adapters
+## Language Implementations
 
-LitPro's architecture makes it easy to extend to other programming languages:
+LitPro provides complete implementations for multiple programming languages:
 
-### Creating a Language Adapter
+### Python (Primary Implementation)
+- **Location**: `src/`
+- **Commands**: `litpro run`, `litpro export`, `litpro html`
+- **File Extension**: `.lit`, `.lpmd`, `.md`
+- **Features**: Full implementation with web interface
 
-Each language requires a simple adapter that implements:
-- Code parser for the language
-- Dependency resolver
-- Execution environment
-- Error formatter
-
-### Example: JavaScript Adapter
-```javascript
-// litpro-js-adapter.js
-export class JavaScriptAdapter {
-  parse(code) { /* parse JS code */ }
-  execute(code, context) { /* execute JS */ }
-  resolveDependencies(cells) { /* resolve deps */ }
-}
-```
-
-### Available Language Implementations
-
-#### Julia Implementation
-LitPro is now available for the Julia programming language! The Julia implementation provides the same literate programming capabilities with Julia-specific optimizations.
+### Julia Implementation
+LitPro is available for the Julia programming language! The Julia implementation provides the same literate programming capabilities with Julia-specific optimizations.
 
 **Features:**
 - Full Julia language support
@@ -284,9 +270,79 @@ println("Result: \$result")
 ```
 ```
 
+### JavaScript Implementation
+LitPro is available for JavaScript with both Node.js and browser support.
+
+**Features:**
+- Node.js and browser compatibility
+- Full dependency resolution
+- Export and HTML generation capabilities
+
+**Installation:**
+```bash
+npm install litpro-js
+```
+
+**Usage:**
+```javascript
+const LitPro = require('litpro-js');
+const fs = require('fs');
+
+const content = fs.readFileSync('example.lit', 'utf8');
+const litpro = new LitPro();
+
+await litpro.runLitPro(content);
+```
+
+### Rust Implementation
+LitPro is available for Rust with memory safety and performance benefits.
+
+**Features:**
+- Memory-safe execution
+- High-performance compilation
+- Dependency resolution with error handling
+
+**Usage:**
+```rust
+use litpro::LitPro;
+
+fn main() -> Result<(), LitProError> {
+    let content = std::fs::read_to_string("example.lit")?;
+    
+    let mut litpro = LitPro::new();
+    litpro.run_litpro(&content)?;
+    
+    Ok(())
+}
+```
+
+### Adding New Languages
+
+LitPro's architecture makes it easy to extend to other programming languages:
+
+#### Creating a Language Implementation
+
+Each language implementation should provide:
+- Code parser for the language
+- Dependency resolver
+- Execution environment
+- Error formatter
+- Export functionality
+- HTML generation
+
+#### Example: JavaScript Implementation Structure
+```javascript
+// LitPro.js
+class LitPro {
+  parseCells(content) { /* parse cells */ }
+  resolveDependencies(cells) { /* resolve deps */ }
+  runLitPro(content) { /* execute */ }
+  exportLitPro(content, output) { /* export */ }
+  htmlLitPro(content, output) { /* generate html */ }
+}
+```
+
 ### Planned Language Support
-- JavaScript/TypeScript
-- Rust
 - Go
 - R
 - C/C++

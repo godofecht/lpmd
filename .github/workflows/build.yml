@@ -1,0 +1,82 @@
+name: Generate Packages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-python:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    - name: Build package
+      run: |
+        python -m build
+    - name: Archive Python package
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-package
+        path: dist/
+
+  build-julia:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Julia
+      uses: julia-actions/setup-julia@v1
+      with:
+        version: '1.8'
+    - name: Build Julia package
+      run: |
+        julia --project=julia -e 'using Pkg; Pkg.instantiate()'
+        julia --project=julia julia/LitPro.jl
+    - name: Archive Julia package
+      uses: actions/upload-artifact@v3
+      with:
+        name: julia-package
+        path: julia/
+
+  build-javascript:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - name: Build JavaScript package
+      run: |
+        cd js
+        npm init -y
+        npm pack
+    - name: Archive JavaScript package
+      uses: actions/upload-artifact@v3
+      with:
+        name: javascript-package
+        path: js/*.tgz
+
+  build-rust:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Build Rust package
+      run: |
+        cd rust
+        rustc --crate-type lib LitPro.rs -o liblitpro.rlib
+    - name: Archive Rust package
+      uses: actions/upload-artifact@v3
+      with:
+        name: rust-package
+        path: rust/
