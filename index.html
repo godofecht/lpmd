@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Literate Python Markdown (LPMD) - Executable Literate Programming</title>
+    <title>Literate Python Markdown (LPMD)</title>
     <style>
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
-            --accent-color: #e74c3c;
             --light-color: #ecf0f1;
             --dark-color: #34495e;
         }
@@ -27,10 +26,9 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-color: var(--primary-color);
             color: white;
-            padding: 2rem 0;
-            text-align: center;
+            padding: 1rem 0;
         }
         
         .container {
@@ -39,125 +37,54 @@
             padding: 0 20px;
         }
         
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
         nav {
-            background-color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
         }
         
         nav ul {
             display: flex;
-            justify-content: center;
             list-style: none;
         }
         
         nav li {
-            margin: 0 1rem;
+            margin-left: 1.5rem;
         }
         
         nav a {
             text-decoration: none;
-            color: var(--dark-color);
+            color: white;
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            transition: opacity 0.3s;
         }
         
         nav a:hover {
-            background-color: #f1f1f1;
+            opacity: 0.8;
         }
         
         section {
-            padding: 3rem 0;
+            padding: 2rem 0;
         }
         
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
+        .intro {
+            padding: 2rem 0;
         }
         
-        .hero h2 {
+        .intro h1 {
             font-size: 2rem;
             margin-bottom: 1rem;
             color: var(--primary-color);
         }
         
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            color: var(--dark-color);
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        .feature-card h3 {
-            color: var(--secondary-color);
+        .intro p {
             margin-bottom: 1rem;
-        }
-        
-        .demo-section {
-            background-color: white;
-            padding: 3rem 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin: 2rem 0;
-        }
-        
-        .demo-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .demo-left, .demo-right {
-            flex: 1;
-            min-width: 300px;
+            max-width: 800px;
         }
         
         .code-block {
@@ -176,59 +103,95 @@
         .code-string { color: #2ecc71; }
         .code-function { color: #9b59b6; }
         
-        .how-it-works {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 3rem 0;
+        .runner-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 2rem 0;
         }
         
-        .steps {
+        .runner-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 2rem;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 1.5rem;
         }
         
-        .step {
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
-            padding: 1.5rem;
+        .input-area, .output-area {
+            width: 100%;
         }
         
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        button {
             background-color: var(--secondary-color);
             color: white;
-            border-radius: 50%;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
             font-weight: bold;
-            margin-bottom: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .syntax-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        
+        .syntax-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .syntax-card {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .syntax-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
         }
         
         footer {
             background-color: var(--primary-color);
             color: white;
             text-align: center;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             margin-top: 3rem;
         }
         
         @media (max-width: 768px) {
-            nav ul {
+            nav {
                 flex-direction: column;
-                align-items: center;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 0.5rem;
             }
             
             nav li {
-                margin: 0.5rem 0;
-            }
-            
-            .demo-container {
-                flex-direction: column;
+                margin: 0 0.5rem;
             }
         }
     </style>
@@ -236,210 +199,179 @@
 <body>
     <header>
         <div class="container">
-            <h1>Literate Python Markdown (LPMD)</h1>
-            <p class="subtitle">Revolutionary executable literate programming for the modern era</p>
+            <nav>
+                <div class="logo">LPMD</div>
+                <ul>
+                    <li><a href="#syntax">Syntax</a></li>
+                    <li><a href="#runner">Runner</a></li>
+                    <li><a href="https://github.com/godofecht/lpmd">GitHub</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
     
-    <nav>
+    <section class="intro">
         <div class="container">
+            <h1>Literate Python Markdown (LPMD)</h1>
+            <p>LPMD is a technology that allows executable Python code in markdown files. Unlike traditional literate programming that only displays code, LPMD actually runs your markdown documents as executable programs.</p>
+            <p>LPMD uses special cell markers to define executable code blocks with dependency management.</p>
+        </div>
+    </section>
+    
+    <section id="syntax" class="syntax-section">
+        <div class="container">
+            <h2>LPMD Syntax</h2>
+            <p>LPMD uses HTML comments as cell markers to keep the markdown readable while enabling execution:</p>
+            
+            <div class="syntax-grid">
+                <div class="syntax-card">
+                    <h3>Basic Cell</h3>
+                    <div class="code-block">
+                        &lt;!-- cell:cell_id --&gt;<br>
+                        ```python<br>
+                        print("Hello from LPMD!")<br>
+                        x = 10<br>
+                        ```<br>
+                    </div>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Cell with Dependencies</h3>
+                    <div class="code-block">
+                        &lt;!-- cell:compute depends:setup --&gt;<br>
+                        ```python<br>
+                        result = x * 2<br>
+                        print(f"Result: {result}")<br>
+                        ```<br>
+                    </div>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Cell with Persistence</h3>
+                    <div class="code-block">
+                        &lt;!-- cell:process depends:load persist:data --&gt;<br>
+                        ```python<br>
+                        processed_data = transform(data)<br>
+                        ```<br>
+                    </div>
+                </div>
+            </div>
+            
+            <p><strong>Parameters:</strong></p>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#demo">Demo</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#examples">Examples</a></li>
-                <li><a href="https://github.com/godofecht/lpmd">GitHub</a></li>
+                <li><code>cell_id</code>: Unique identifier for the cell</li>
+                <li><code>depends</code>: Comma-separated list of cells this cell depends on</li>
+                <li><code>persist</code>: Variables to explicitly persist (optional)</li>
             </ul>
         </div>
-    </nav>
-    
-    <section class="hero" id="home">
-        <div class="container">
-            <h2>Executable Literate Programming</h2>
-            <p>Literate Python Markdown (LPMD) allows you to write and execute interactive Python programs directly in markdown files. Unlike traditional literate programming that only displays code, LPMD actually runs your markdown documents as executable programs.</p>
-            <a href="https://github.com/godofecht/lpmd" class="btn">Get Started</a>
-        </div>
     </section>
     
-    <section id="features">
+    <section id="runner" class="runner-section">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Key Features</h2>
-            <div class="features">
-                <div class="feature-card">
-                    <h3>Cell-Based Execution</h3>
-                    <p>Code organized in executable cells with dependency management. Each cell can depend on others, ensuring proper execution order.</p>
+            <h2>LPMD Runner</h2>
+            <p>Try executing LPMD code directly in your browser. Enter your LPMD code below and click Run:</p>
+            
+            <div class="runner-container">
+                <div class="input-area">
+                    <label for="lpmd-input"><strong>Your LPMD Code:</strong></label>
+                    <textarea id="lpmd-input" placeholder="Enter your LPMD code here..."><!-- cell:setup -->
+```python
+print("Hello from LPMD!")
+x = 10
+y = 20
+```
+
+<!-- cell:compute depends:setup -->
+```python
+result = x + y
+print(f"Sum: {result}")
+```
+
+<!-- cell:display depends:compute -->
+```python
+print(f"The final result is: {result}")
+```</textarea>
                 </div>
                 
-                <div class="feature-card">
-                    <h3>Smart Dependencies</h3>
-                    <p>Cells run in dependency order using topological sort. Define which cells depend on others for complex execution flows.</p>
-                </div>
+                <button onclick="runLPMD()">Run Code</button>
                 
-                <div class="feature-card">
-                    <h3>Variable Persistence</h3>
-                    <p>Share variables between cells with explicit persistence. Variables defined in one cell are available in dependent cells.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>Markdown Native</h3>
-                    <p>Pure markdown format that's readable in any editor. Code executes without affecting the document's appearance.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>Web Integration</h3>
-                    <p>Generate HTML output and run in browsers. Includes web interface for interactive development.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>Audio Processing</h3>
-                    <p>Built-in support for audio processing examples, including the 4096-band multi-band compressor.</p>
+                <div class="output-area">
+                    <label for="lpmd-output"><strong>Output:</strong></label>
+                    <textarea id="lpmd-output" readonly placeholder="Output will appear here..."></textarea>
                 </div>
             </div>
         </div>
     </section>
     
-    <section id="demo">
+    <section class="syntax-section">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Live Demo</h2>
-            <div class="demo-section">
-                <h3>How LPMD Works</h3>
-                <p>Literate Python Markdown uses special cell markers to define executable code blocks:</p>
-                
-                <div class="demo-container">
-                    <div class="demo-left">
-                        <h4>LPMD Syntax</h4>
-                        <div class="code-block">
-                            <!-- cell:setup --><br>
-                            ```python<br>
-                            print("Hello from LPMD!")<br>
-                            x = 10<br>
-                            y = 20<br>
-                            ```<br><br>
-                            <!-- cell:compute depends:setup --><br>
-                            ```python<br>
-                            result = x + y<br>
-                            print(f"Sum: {result}")<br>
-                            ```<br><br>
-                            <!-- cell:display depends:compute --><br>
-                            ```python<br>
-                            print(f"The final result is: {result}")<br>
-                            ```<br>
-                        </div>
+            <h2>How to Use LPMD</h2>
+            
+            <div class="syntax-grid">
+                <div class="syntax-card">
+                    <h3>Installation</h3>
+                    <div class="code-block">
+                        pip install lpmd
                     </div>
-                    
-                    <div class="demo-right">
-                        <h4>Execution Flow</h4>
-                        <p>1. The <span class="code-keyword">setup</span> cell runs first, defining variables x and y</p>
-                        <p>2. The <span class="code-keyword">compute</span> cell runs next (depends on setup), calculating the sum</p>
-                        <p>3. The <span class="code-keyword">display</span> cell runs last (depends on compute), showing the result</p>
-                        
-                        <h4>Expected Output</h4>
-                        <div class="code-block">
-                            Hello from LPMD!<br>
-                            Sum: 30<br>
-                            The final result is: 30<br>
-                        </div>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Execute File</h3>
+                    <div class="code-block">
+                        lpmd-execute myfile.lpmd
+                    </div>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Generate HTML</h3>
+                    <div class="code-block">
+                        lpmd-generate-html myfile.lpmd
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">How LPMD Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Write Markdown</h3>
-                    <p>Create a markdown file with special cell markers that define executable code blocks</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Define Dependencies</h3>
-                    <p>Specify which cells depend on others using the 'depends' parameter in cell markers</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Execute</h3>
-                    <p>Run the LPMD executor which parses cells and executes them in dependency order</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>View Results</h3>
-                    <p>See the output of your executable document, with variables shared between cells</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section id="examples">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Real-World Example</h2>
-            <div class="demo-section">
-                <h3>4096-Band Multi-Band Compressor</h3>
-                <p>One of the standout examples in LPMD is the 4096-band multi-band compressor, which demonstrates advanced audio processing:</p>
-                
-                <div class="code-block">
-                    <!-- cell:import_deps --><br>
-                    ```python<br>
-                    import torch<br>
-                    import torch.nn.functional as F<br>
-                    import numpy as np<br>
-                    print("PyTorch version:", torch.__version__)<br>
-                    ```<br><br>
-                    
-                    <!-- cell:define_compressor depends:import_deps --><br>
-                    ```python<br>
-                    class MultiBandCompressor(torch.nn.Module):<br>
-                        def __init__(self, fft_size=4096, sample_rate=44100):<br>
-                            super().__init__()<br>
-                            self.fft_size = fft_size<br>
-                            self.sample_rate = sample_rate<br>
-                            self.hop_size = fft_size // 4  # 25% hop<br>
-                            self.num_bands = fft_size // 2 + 1<br>
-                            <br>
-                            # Create Hann window for overlap-add<br>
-                            self.register_buffer('window', torch.hann_window(fft_size))<br>
-                            <br>
-                            # Initialize compression parameters per band<br>
-                            self.register_parameter('threshold_db', <br>
-                                torch.nn.Parameter(torch.full((self.num_bands,), -20.0)))<br>
-                            self.register_parameter('ratio', <br>
-                                torch.nn.Parameter(torch.full((self.num_bands,), 4.0)))<br>
-                        <br>
-                        def forward(self, audio):<br>
-                            # Implementation details here<br>
-                            return audio  # Simplified for demo<br>
-                    <br>
-                    compressor = MultiBandCompressor()<br>
-                    print(f"Created compressor with {compressor.num_bands} frequency bands")<br>
-                    ```<br>
-                </div>
-                
-                <p>This example shows how LPMD enables complex technical documentation that is simultaneously executable code. The 4096-band compressor processes audio by:</p>
-                <ul style="margin: 1rem 0 1rem 2rem;">
-                    <li>Performing FFT analysis with 4096-point transforms</li>
-                    <li>Applying compression independently to each of the 2049 frequency bins</li>
-                    <li>Using overlap-add synthesis to reconstruct the audio</li>
-                    <li>Providing independent control over each frequency band</li>
-                </ul>
-                
-                <p>Try this example yourself by cloning the repository and running the audio processing demos!</p>
-            </div>
+            
+            <h3 style="margin-top: 1.5rem;">Execution Process</h3>
+            <ol>
+                <li>LPMD parses the file to identify cells and their dependencies</li>
+                <li>It resolves execution order using topological sorting</li>
+                <li>Cells are executed in dependency order</li>
+                <li>Variables are shared between dependent cells</li>
+                <li>Output is displayed as the code executes</li>
+            </ol>
         </div>
     </section>
     
     <footer>
         <div class="container">
-            <p>Literate Python Markdown (LPMD) - Revolutionizing how we write and execute computational narratives</p>
-            <p>© 2024 Abhishek Shivakumar. Licensed under MIT.</p>
+            <p>Literate Python Markdown (LPMD) | Licensed under MIT</p>
             <p><a href="https://github.com/godofecht/lpmd" style="color: white; text-decoration: underline;">View on GitHub</a></p>
         </div>
     </footer>
+    
+    <script>
+        function runLPMD() {
+            const input = document.getElementById('lpmd-input').value;
+            const output = document.getElementById('lpmd-output');
+            
+            // This is a simulation since actual Python execution isn't possible in browser
+            // In a real implementation, this would connect to a backend service
+            output.value = "Note: This is a frontend simulation.\n\n";
+            output.value += "In a real environment, this would:\n";
+            output.value += "1. Parse the LPMD syntax\n";
+            output.value += "2. Identify cells and dependencies\n";
+            output.value += "3. Execute cells in dependency order\n";
+            output.value += "4. Return the output of each cell\n\n";
+            
+            // Simulate the expected output based on the default example
+            if (input.includes("Hello from LPMD!")) {
+                output.value += "Actual expected output would be:\n";
+                output.value += "Hello from LPMD!\n";
+                output.value += "Sum: 30\n";
+                output.value += "The final result is: 30\n";
+            } else {
+                output.value += "Enter LPMD code to see simulated execution.";
+            }
+        }
+    </script>
 </body>
 </html>
