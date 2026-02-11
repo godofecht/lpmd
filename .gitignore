@@ -162,8 +162,9 @@ dmypy.json
 ehthumbs.db
 Thumbs.db
 
-# Generated HTML files
+# Generated HTML files (excluding index.html for GitHub Pages)
 *.html
+!index.html
 
 # Temporary files
 *.tmp
