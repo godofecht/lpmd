@@ -238,11 +238,56 @@ export class JavaScriptAdapter {
 }
 ```
 
+### Available Language Implementations
+
+#### Julia Implementation
+LitPro is now available for the Julia programming language! The Julia implementation provides the same literate programming capabilities with Julia-specific optimizations.
+
+**Features:**
+- Full Julia language support
+- High-performance numerical computing
+- Integration with Julia's package ecosystem
+- Cell-based execution with dependency management
+
+**Installation:**
+```julia
+# In Julia REPL:
+include("julia/LitPro.jl")
+using .LitPro
+```
+
+**Usage:**
+```julia
+# Execute a literate file
+run_litpro("example.lit")
+
+# Export to plain Julia code
+export_litpro("example.lit", "output.jl")
+
+# Generate HTML documentation
+html_litpro("example.lit", "output.html")
+```
+
+**Example:**
+```markdown
+<!-- cell:setup -->
+```julia
+using LinearAlgebra
+println("Julia setup complete")
+x = 10
+```
+
+<!-- cell:compute depends:setup -->
+```julia
+result = x * 2
+println("Result: \$result")
+```
+```
+
 ### Planned Language Support
 - JavaScript/TypeScript
 - Rust
 - Go
-- Julia
 - R
 - C/C++
 

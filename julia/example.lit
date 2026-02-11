@@ -1,0 +1,80 @@
+# Signal Processing with LitPro.jl
+
+This example demonstrates how to perform basic signal processing using LitPro.jl.
+
+<!-- cell:setup -->
+```julia
+using LinearAlgebra
+using Statistics
+using Random
+
+println("Setting up signal processing environment")
+println("Julia version: \$(VERSION)")
+
+# Seed for reproducibility
+Random.seed!(123)
+```
+
+<!-- cell:generate-signal depends:setup -->
+```julia
+# Generate a test signal: combination of sine waves
+fs = 1000  # Sampling frequency
+T = 1      # Duration in seconds
+t = 0:1/fs:T-1/fs  # Time vector
+f1, f2 = 5, 50     # Frequencies of sine waves
+
+# Create composite signal
+signal = sin.(2π * f1 * t) + 0.5 * sin.(2π * f2 * t)
+noise = 0.1 * randn(length(t))
+noisy_signal = signal + noise
+
+println("Generated signal with \$(length(signal)) samples")
+println("Signal frequency components: \$(f1)Hz and \$(f2)Hz")
+```
+
+<!-- cell:analyze-signal depends:generate-signal -->
+```julia
+# Basic signal analysis
+mean_val = mean(noisy_signal)
+std_val = std(noisy_signal)
+max_val = maximum(noisy_signal)
+min_val = minimum(noisy_signal)
+
+println("Signal statistics:")
+println("  Mean: \$(round(mean_val, digits=4))")
+println("  Std:  \$(round(std_val, digits=4))")
+println("  Max:  \$(round(max_val, digits=4))")
+println("  Min:  \$(round(min_val, digits=4))")
+
+# Simple moving average filter
+function moving_average(x, window_size)
+    y = zeros(length(x) - window_size + 1)
+    for i in 1:length(y)
+        y[i] = mean(x[i:i+window_size-1])
+    end
+    return y
+end
+
+filtered_signal = moving_average(noisy_signal, 10)
+println("Applied moving average filter with window size 10")
+println("Filtered signal length: \$(length(filtered_signal))")
+```
+
+<!-- cell:results depends:analyze-signal -->
+```julia
+# Compare original and filtered signals
+original_power = sum(abs2, signal)
+filtered_power = sum(abs2, filtered_signal[1:length(signal)])  # Match lengths
+noise_power = sum(abs2, noisy_signal - signal)
+
+println("\nPower analysis:")
+println("  Original signal power: \$(round(original_power, digits=4))")
+println("  Noise power: \$(round(noise_power, digits=4))")
+println("  SNR (approx): \$(round(10*log10(original_power/noise_power), digits=2)) dB")
+
+# Show sample values
+println("\nSample values (first 5):")
+println("  Original: \$(signal[1:5])")
+println("  Noisy:    \$(noisy_signal[1:5])")
+println("  Filtered: \$(filtered_signal[1:5])")
+```
