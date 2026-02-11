@@ -470,28 +470,136 @@ print("STFT function defined")
         </div>
     </footer>
     
+    <script src="https://skulpt.org/js/skulpt.min.js"></script>
+    <script src="https://skulpt.org/js/skulpt-stdlib.js"></script>
     <script>
         function runLPMD() {
             const input = document.getElementById('lpmd-input').value;
             const output = document.getElementById('lpmd-output');
             
-            // This is a simulation since actual Python execution isn't possible in browser
-            // In a real implementation, this would connect to a backend service
-            output.value = "Note: This is a frontend simulation.\n\n";
-            output.value += "In a real environment, this would:\n";
-            output.value += "1. Parse the LPMD syntax\n";
-            output.value += "2. Identify cells and dependencies\n";
-            output.value += "3. Execute cells in dependency order (window-function before stft)\n";
-            output.value += "4. Return the output of each cell\n\n";
+            // Clear output area
+            output.value = '';
             
-            // Simulate the expected output based on the default example
-            if (input.includes("window-function")) {
-                output.value += "Actual expected output would be:\n";
-                output.value += "Window function defined\n";
-                output.value += "STFT function defined\n";
-            } else {
-                output.value += "Enter LPMD code to see simulated execution.";
+            // Parse LPMD syntax to extract cells
+            const cellPattern = /<!--\s*cell:([^>\s]+)([^>]*)?-->[\s\n]*```python([\s\S]*?)```/g;
+            const cells = [];
+            let match;
+            
+            while ((match = cellPattern.exec(input)) !== null) {
+                const cellId = match[1].trim();
+                const dependenciesStr = match[2];
+                const code = match[3].trim();
+                
+                // Extract dependencies
+                let dependencies = [];
+                if (dependenciesStr) {
+                    const dependsMatch = dependenciesStr.match(/depends:([^\s]+)/);
+                    if (dependsMatch) {
+                        dependencies = dependsMatch[1].split(',').map(dep => dep.trim());
+                    }
+                }
+                
+                cells.push({
+                    id: cellId,
+                    code: code,
+                    dependencies: dependencies,
+                    executed: false
+                });
             }
+            
+            if (cells.length === 0) {
+                output.value = "No LPMD cells found in the input.";
+                return;
+            }
+            
+            // Topological sort to determine execution order
+            const executionOrder = topologicalSort(cells);
+            
+            if (!executionOrder) {
+                output.value = "Error: Circular dependency detected in cells.";
+                return;
+            }
+            
+            // Execute cells in order
+            const skulptGlobals = {};
+            
+            for (const cellId of executionOrder) {
+                const cell = cells.find(c => c.id === cellId);
+                
+                if (cell) {
+                    output.value += `\n--- Executing cell: ${cell.id} ---\n`;
+                    
+                    // Run the code in Skulpt
+                    Sk.pre = "lpmd-output";
+                    Sk.configure({output: function(text) {
+                        output.value += text;
+                    }});
+                    
+                    try {
+                        Sk.misceval.asyncToPromise(function() {
+                            return Sk.importMainWithBody("<stdin>", false, cell.code, true);
+                        });
+                    } catch (e) {
+                        output.value += `Error in cell ${cell.id}: ${e}\n`;
+                    }
+                    
+                    cell.executed = true;
+                }
+            }
+            
+            output.value += "\n--- Execution completed ---\n";
+        }
+        
+        function topologicalSort(cells) {
+            const graph = {};
+            const inDegree = {};
+            
+            // Initialize graph and in-degree
+            cells.forEach(cell => {
+                graph[cell.id] = [];
+                inDegree[cell.id] = 0;
+            });
+            
+            // Build graph and calculate in-degrees
+            cells.forEach(cell => {
+                cell.dependencies.forEach(dep => {
+                    if (graph[dep]) {  // Check if dependency exists
+                        graph[dep].push(cell.id);
+                        inDegree[cell.id]++;
+                    } else {
+                        console.error(`Dependency ${dep} not found for cell ${cell.id}`);
+                    }
+                });
+            });
+            
+            // Kahn's algorithm for topological sort
+            const queue = [];
+            Object.keys(inDegree).forEach(node => {
+                if (inDegree[node] === 0) {
+                    queue.push(node);
+                }
+            });
+            
+            const result = [];
+            
+            while (queue.length > 0) {
+                const node = queue.shift();
+                result.push(node);
+                
+                graph[node].forEach(neighbor => {
+                    inDegree[neighbor]--;
+                    if (inDegree[neighbor] === 0) {
+                        queue.push(neighbor);
+                    }
+                });
+            }
+            
+            // Check if all nodes were included (no cycles)
+            if (result.length !== Object.keys(graph).length) {
+                return null; // Cycle detected
+            }
+            
+            return result;
         }
     </script>
 </body>
