@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lpmd"
+dynamic = ["version", "readme", "dependencies"]
+requires-python = ">=3.7"
+authors = [
+    {name = "Abhishek Shivakumar", email = "abhishek@example.com"},
+]
+maintainers = [
+    {name = "Abhishek Shivakumar", email = "abhishek@example.com"},
+]
+description = "Literate Python Markdown - A revolutionary literate programming framework"
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Markup",
+    "Typing :: Typed",
+]
+keywords = ["literate-programming", "markdown", "python", "documentation", "executable-documentation", "jupyter-alternative"]
+
+[project.urls]
+Homepage = "https://github.com/godofecht/lpmd"
+Documentation = "https://github.com/godofecht/lpmd#readme"
+Repository = "https://github.com/godofecht/lpmd"
+Changelog = "https://github.com/godofecht/lpmd/releases"
+
+[project.scripts]
+lpmd-execute = "src.core.lpmd_executor:main"
+lpmd-generate-html = "src.core.lpmd_html_generator:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "src.core.lpmd_executor.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+dependencies = {file = ["requirements.txt"]}

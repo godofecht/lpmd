@@ -15,6 +15,8 @@ Usage:
 python lpmd_executor.py literate_python.md
 """
 
+__version__ = "1.0.0"
+
 import re
 import sys
 import os
