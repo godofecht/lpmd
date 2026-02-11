@@ -1,7 +1,7 @@
 """
-Literate Python Markdown (LPMD) - Setup Configuration
+LitPro - Setup Configuration
 
-Setup script for installing the LPMD package.
+Setup script for installing the LitPro package.
 """
 
 from setuptools import setup, find_packages
@@ -17,14 +17,14 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name="lpmd",
+    name="litpro",
     version="1.0.0",
     author="Abhishek Shivakumar",
     author_email="abhishek@example.com",
-    description="Literate Python Markdown - A revolutionary literate programming framework",
+    description="LitPro - Modern literate programming framework for any language",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/abhishekshivakumar/lpmd_project",
+    url="https://github.com/godofecht/litpro",
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     classifiers=[
@@ -41,19 +41,19 @@ setup(
         "Topic :: Software Development :: Documentation",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Text Processing :: Markup",
+        "Typing :: Typed",
     ],
     python_requires='>=3.7',
     install_requires=requirements,
     entry_points={
         'console_scripts': [
-            'lpmd-execute=core.lpmd_executor:main',
-            'lpmd-generate-html=core.lpmd_html_generator:main',
+            'litpro=src.core.litpro_cli:main',
         ],
     },
-    keywords='literate-programming, markdown, python, documentation, executable-documentation',
+    keywords='literate-programming, markdown, python, documentation, executable-documentation, jupyter-alternative, multi-language',
     project_urls={
-        'Documentation': 'https://github.com/abhishekshivakumar/lpmd_project#readme',
-        'Source': 'https://github.com/abhishekshivakumar/lpmd_project',
-        'Tracker': 'https://github.com/abhishekshivakumar/lpmd_project/issues',
+        'Documentation': 'https://github.com/godofecht/litpro#readme',
+        'Source': 'https://github.com/godofecht/litpro',
+        'Tracker': 'https://github.com/godofecht/litpro/issues',
     },
 )

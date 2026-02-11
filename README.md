@@ -1,10 +1,10 @@
 <div align="center">
-  <h1>Literate Python Markdown (LPMD)</h1>
-  <p><strong>Revolutionary executable literate programming for the modern era</strong></p>
+  <h1>LitPro - Literate Programming Framework</h1>
+  <p><strong>Modern executable literate programming for any language</strong></p>
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
-  [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/abhishekshivakumar/lpmd_project)
+  [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/godofecht/litpro)
   
 </div>
 
@@ -17,44 +17,49 @@
 - [Usage](#usage)
 - [Examples](#examples)
 - [API Reference](#api-reference)
+- [Embedding in Websites](#embedding-in-websites)
+- [Language Adapters](#language-adapters)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
 ## About
 
-Literate Python Markdown (LPMD) is a revolutionary technology that allows you to write and execute interactive Python programs directly in markdown files. Unlike traditional literate programming that only displays code, LPMD **actually runs** your markdown documents as executable programs.
+LitPro is a modern literate programming framework that allows you to write and execute interactive programs directly in markdown files. Unlike traditional literate programming that only displays code, LitPro **actually runs** your documents as executable programs.
 
-This project combines the readability of markdown with the power of executable code, enabling a new paradigm for technical documentation, educational content, and reproducible research.
+This project combines the readability of markdown with the power of executable code, enabling a new paradigm for technical documentation, educational content, and reproducible research. The framework is designed to be language-agnostic, supporting Python, JavaScript, Rust, and more.
 
-### Why LPMD?
+### Why LitPro?
 - **Readable**: Clean markdown syntax that renders beautifully everywhere
 - **Executable**: Actually runs your code as part of the documentation
 - **Modular**: Cell-based execution with dependency management
-- **Flexible**: Works with any Python library or framework
+- **Flexible**: Works with any programming language ecosystem
+- **Deterministic**: No hidden state, reproducible results every time
+- **Language-Agnostic**: Easy to extend to other programming languages
 
 ## Features
 
-- Cell-Based Execution: Code organized in executable cells with dependency management
-- Smart Dependencies: Cells run in dependency order using topological sort
-- Variable Persistence: Share variables between cells with explicit persistence
-- Interactive Execution: Execute cells individually or run complete programs
-- Markdown Native: Pure markdown format, readable in any editor
-- Python Powered: Full Python execution with state management
-- Web Integration: Generate HTML output and run in browsers
-- Audio Processing: Built-in support for audio processing examples
+- **Cell-Based Execution**: Code organized in executable cells with dependency management
+- **Smart Dependencies**: Cells run in dependency order using topological sort
+- **Variable Persistence**: Share variables between cells with explicit persistence
+- **Interactive Execution**: Execute cells individually or run complete programs
+- **Markdown Native**: Pure markdown format, readable in any editor
+- **Multi-Language Support**: Framework designed for any programming language
+- **Web Integration**: Generate HTML output and run in browsers
+- **Website Embedding**: Easy integration into blogs and documentation sites
 
 ## Installation
 
-### Prerequisites
-- Python 3.7+
-- pip package manager
-
 ### Quick Install
 ```bash
+pip install litpro
+```
+
+### From Source
+```bash
 # Clone the repository
-git clone https://github.com/abhishekshivakumar/lpmd_project.git
-cd lpmd_project
+git clone https://github.com/godofecht/litpro.git
+cd litpro
 
 # Create a virtual environment (recommended)
 python -m venv venv
@@ -71,16 +76,29 @@ pip install torch torchvision torchaudio
 
 ## Usage
 
-### Creating Your First LPMD File
+### Simple Commands
 
-Create a file named `hello.lpmd`:
+```bash
+# Execute a literate file
+litpro run myfile.lit
+
+# Export to plain code
+litpro export myfile.lit
+
+# Generate HTML documentation
+litpro html myfile.lit
+```
+
+### Creating Your First LitPro File
+
+Create a file named `hello.lit`:
 
 ```markdown
 # My First Literate Program
 
 <!-- cell:setup -->
 ```python
-print("Hello from LPMD!")
+print("Hello from LitPro!")
 x = 10
 y = 20
 ```
@@ -95,16 +113,6 @@ print(f"Sum: {result}")
 ```python
 print(f"The final result is: {result}")
 ```
-```
-
-### Running LPMD Files
-
-Execute your LPMD file:
-
-```bash
-python src/core/lpmd_executor.py hello.lpmd
-# Or auto-confirm:
-python src/core/lpmd_executor.py hello.lpmd --yes
 ```
 
 ### Cell Syntax
@@ -144,27 +152,99 @@ print(f"Result: {result}")
 Check out `examples/interactive_audio_demo.md` for a complete audio processing example with the 4096-band multi-band compressor.
 
 ### Data Analysis
-See `examples/data_analysis.lpmd` for data science workflows.
+See `examples/data_analysis.lit` for data science workflows.
 
 ## API Reference
 
 ### Core Components
 
-#### lpmd_executor.py
-Main execution engine for LPMD files.
+#### litpro_executor.py
+Main execution engine for LitPro files.
 
-- `execute_lpmd(file_path, auto_confirm=False)`: Execute an LPMD file
-- `parse_cells(content)`: Parse cells from LPMD content
+- `execute_litpro(file_path, auto_confirm=False)`: Execute a LitPro file
+- `parse_cells(content)`: Parse cells from LitPro content
 - `resolve_dependencies(cells)`: Resolve execution order based on dependencies
 
-#### lpmd_html_generator.py
-Convert LPMD files to HTML.
+#### litpro_html_generator.py
+Convert LitPro files to HTML.
 
-- `generate_html(lpmd_content)`: Generate HTML from LPMD content
+- `generate_html(litpro_content)`: Generate HTML from LitPro content
 - `save_html(html_content, output_path)`: Save HTML to file
 
-#### lpmd_web_server.py
-Web interface for interactive LPMD development.
+#### litpro_web_server.py
+Web interface for interactive LitPro development.
+
+## Embedding in Websites
+
+LitPro can be embedded directly in websites and blogs:
+
+### Web Component
+```html
+<script src="https://cdn.jsdelivr.net/npm/litpro-web-component@latest/litpro-runner.js"></script>
+<litpro-runner>
+  <pre><code>
+    <!-- cell:setup -->
+    ```python
+    print("Hello from LitPro!")
+    x = 10
+    ```
+  </code></pre>
+</litpro-runner>
+```
+
+### JavaScript API
+```html
+<script>
+  import { LitPro } from 'litpro-web-component';
+
+  const litpro = new LitPro({
+    selector: '#litpro-container',
+    code: `<!-- cell:setup -->
+      ```python
+      print("Hello from LitPro!")
+      x = 10
+      ```
+      <!-- cell:compute depends:setup -->
+      ```python
+      result = x * 2
+      print(f"Result: {result}")
+      ```
+    `
+  });
+
+  litpro.render();
+</script>
+```
+
+## Language Adapters
+
+LitPro's architecture makes it easy to extend to other programming languages:
+
+### Creating a Language Adapter
+
+Each language requires a simple adapter that implements:
+- Code parser for the language
+- Dependency resolver
+- Execution environment
+- Error formatter
+
+### Example: JavaScript Adapter
+```javascript
+// litpro-js-adapter.js
+export class JavaScriptAdapter {
+  parse(code) { /* parse JS code */ }
+  execute(code, context) { /* execute JS */ }
+  resolveDependencies(cells) { /* resolve deps */ }
+}
+```
+
+### Planned Language Support
+- JavaScript/TypeScript
+- Rust
+- Go
+- Julia
+- R
+- C/C++
 
 ## Contributing
 
@@ -181,8 +261,8 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for more details.
 ### Development Setup
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/lpmd_project.git
-cd lpmd_project
+git clone https://github.com/YOUR_USERNAME/litpro.git
+cd litpro
 
 # Create virtual environment
 python -m venv venv
@@ -210,14 +290,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Maintainer**: Abhishek Shivakumar
 - **Email**: [abhishek@example.com](mailto:abhishek@example.com)
-- **Repository**: [https://github.com/abhishekshivakumar/lpmd_project](https://github.com/abhishekshivakumar/lpmd_project)
+- **Repository**: [https://github.com/godofecht/litpro](https://github.com/godofecht/litpro)
 
 ---
 
 <div align="center">
-  <sub>Built with love by <a href="https://github.com/abhishekshivakumar">Abhishek Shivakumar</a></sub>
+  <sub>Built with love by <a href="https://github.com/godofecht">Abhishek Shivakumar</a></sub>
 </div>
 
 <div align="center">
-  <sub>Literate Python Markdown - Revolutionizing how we write and execute computational narratives</sub>
+  <sub>LitPro - Revolutionizing how we write and execute computational narratives</sub>
 </div>
