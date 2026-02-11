@@ -216,11 +216,13 @@
     <header>
         <div class="container">
             <nav>
-                <div class="logo">LPMD</div>
+                <div class="logo">LitPro</div>
                 <ul>
                     <li><a href="#philosophy">Philosophy</a></li>
                     <li><a href="#syntax">Syntax</a></li>
                     <li><a href="#runner">Runner</a></li>
+                    <li><a href="#embedding">Embedding</a></li>
+                    <li><a href="#languages">Languages</a></li>
                     <li><a href="https://github.com/godofecht/lpmd">GitHub</a></li>
                 </ul>
             </nav>
@@ -229,9 +231,9 @@
     
     <section class="intro">
         <div class="container">
-            <h1>Literate Python Markdown (LPMD)</h1>
-            <p>LPMD is a literate programming system where the document is primary and the runnable Python script is derived. It follows the tradition of Knuth's WEB and noweb systems, where code blocks are named and expanded in dependency order.</p>
-            <p>Unlike notebooks, LPMD produces deterministic output with no hidden state. The narrative order is chosen for human understanding, not execution order.</p>
+            <h1>LitPro - Literate Programming Framework</h1>
+            <p>LitPro is a modern literate programming system where the document is primary and the runnable code is derived. It follows the tradition of Knuth's WEB and noweb systems, where code blocks are named and expanded in dependency order.</p>
+            <p>Unlike notebooks, LitPro produces deterministic output with no hidden state. The narrative order is chosen for human understanding, not execution order.</p>
         </div>
     </section>
     
@@ -386,13 +388,13 @@
     
     <section id="runner" class="runner-section">
         <div class="container">
-            <h2>LPMD Runner</h2>
-            <p>Try executing LPMD code directly in your browser. Enter your LPMD code below and click Run:</p>
+            <h2>LitPro Runner</h2>
+            <p>Try executing LitPro code directly in your browser. Enter your LitPro code below and click Run:</p>
             
             <div class="runner-container">
                 <div class="input-area">
-                    <label for="lpmd-input"><strong>Your LPMD Code:</strong></label>
-                    <textarea id="lpmd-input" placeholder="Enter your LPMD code here..."><!-- cell:window-function -->
+                    <label for="litpro-input"><strong>Your LitPro Code:</strong></label>
+                    <textarea id="litpro-input" placeholder="Enter your LitPro code here..."><!-- cell:window-function -->
 ```python
 def hann(N):
     return 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(N) / N)
@@ -413,11 +415,11 @@ print("STFT function defined")
 ```</textarea>
                 </div>
                 
-                <button onclick="runLPMD()">Run Code</button>
+                <button onclick="runLitPro()">Run Code</button>
                 
                 <div class="output-area">
-                    <label for="lpmd-output"><strong>Output:</strong></label>
-                    <textarea id="lpmd-output" readonly placeholder="Output will appear here..."></textarea>
+                    <label for="litpro-output"><strong>Output:</strong></label>
+                    <textarea id="litpro-output" readonly placeholder="Output will appear here..."></textarea>
                 </div>
             </div>
         </div>
@@ -425,27 +427,27 @@ print("STFT function defined")
     
     <section class="syntax-section">
         <div class="container">
-            <h2>How to Use LPMD</h2>
+            <h2>How to Use LitPro</h2>
             
             <div class="syntax-grid">
                 <div class="syntax-card">
                     <h3>Installation</h3>
                     <div class="code-block">
-                        pip install lpmd
+                        pip install litpro
                     </div>
                 </div>
                 
                 <div class="syntax-card">
                     <h3>Execute File</h3>
                     <div class="code-block">
-                        lpmd-execute myfile.lpmd
+                        litpro run myfile.lit
                     </div>
                 </div>
                 
                 <div class="syntax-card">
                     <h3>Generate HTML</h3>
                     <div class="code-block">
-                        lpmd-generate-html myfile.lpmd
+                        litpro html myfile.lit
                     </div>
                 </div>
             </div>
@@ -454,9 +456,9 @@ print("STFT function defined")
             <ol>
                 <li>Write your narrative document with named code blocks</li>
                 <li>Specify dependencies between blocks using the <code>depends</code> parameter</li>
-                <li>LPMD resolves execution order using topological sorting</li>
+                <li>LitPro resolves execution order using topological sorting</li>
                 <li>Execute the document to verify correctness</li>
-                <li>Generate clean Python script for deployment</li>
+                <li>Generate clean code for deployment</li>
             </ol>
             
             <p>This workflow ensures that your code is both well-documented and functionally correct, following the true spirit of literate programming.</p>
@@ -516,28 +518,134 @@ print("STFT function defined")
     
     <section class="syntax-section">
         <div class="container">
-            <h2>Language Agnostic Architecture</h2>
-            
-            <p>LPMD's architecture is designed to be language-agnostic, making it easy to extend to other programming languages:</p>
+            <h2>Simple Commands</h2>
             
             <div class="syntax-grid">
                 <div class="syntax-card">
-                    <h3>Current Implementation</h3>
-                    <p>Currently focused on Python, but the architecture supports any language with an interpreter.</p>
+                    <h3>Installation</h3>
+                    <div class="code-block">
+                        pip install litpro
+                    </div>
                 </div>
                 
                 <div class="syntax-card">
-                    <h3>Extensibility</h3>
-                    <p>New language support requires only a parser and executor for that language, following the same dependency resolution patterns.</p>
+                    <h3>Execute File</h3>
+                    <div class="code-block">
+                        litpro run myfile.lit
+                    </div>
                 </div>
                 
                 <div class="syntax-card">
-                    <h3>Future Languages</h3>
-                    <p>Potential for JavaScript, Rust, Go, Julia, R, or any language that benefits from literate programming principles.</p>
+                    <h3>Generate Script</h3>
+                    <div class="code-block">
+                        litpro export myfile.lit
+                    </div>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Generate HTML</h3>
+                    <div class="code-block">
+                        litpro html myfile.lit
+                    </div>
                 </div>
             </div>
             
-            <p>This flexibility means that as better ecosystems emerge, LPMD can seamlessly adopt them while maintaining the same literate programming principles.</p>
+            <p>These simple commands make it easy to integrate LitPro into your development workflow.</p>
+        </div>
+    </section>
+    
+    <section id="embedding" class="syntax-section">
+        <div class="container">
+            <h2>Embedding in Websites</h2>
+            
+            <p>Embed LitPro execution directly in your website or blog:</p>
+            
+            <div class="code-block">
+                &lt;script src="https://cdn.jsdelivr.net/npm/litpro-web-component@latest/litpro-runner.js"&gt;&lt;/script&gt;<br>
+                &lt;litpro-runner&gt;<br>
+                &nbsp;&nbsp;&lt;pre&gt;&lt;code&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- cell:setup --&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;```python<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;print("Hello from LitPro!")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;x = 10<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;```<br>
+                &nbsp;&nbsp;&lt;/code&gt;&lt;/pre&gt;<br>
+                &lt;/litpro-runner&gt;
+            </div>
+            
+            <p>Or use the JavaScript API:</p>
+            
+            <div class="code-block">
+                &lt;script&gt;<br>
+                &nbsp;&nbsp;import { LitPro } from 'litpro-web-component';<br><br>
+                
+                &nbsp;&nbsp;const litpro = new LitPro({<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;selector: '#litpro-container',<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;code: `&lt;!-- cell:setup --&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`python<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("Hello from LitPro!")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = 10<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- cell:compute depends:setup --&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`python<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = x * 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(f"Result: {result}")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```<br>
+                &nbsp;&nbsp;});<br><br>
+                
+                &nbsp;&nbsp;litpro.render();<br>
+                &lt;/script&gt;
+            </div>
+            
+            <p>This allows readers to execute your literate programs directly in their browsers.</p>
+        </div>
+    </section>
+    
+    <section id="languages" class="syntax-section">
+        <div class="container">
+            <h2>Adapting to Other Languages</h2>
+            
+            <p>LitPro's architecture makes it easy to extend to other programming languages:</p>
+            
+            <div class="syntax-grid">
+                <div class="syntax-card">
+                    <h3>Language Adapters</h3>
+                    <p>Each language requires a simple adapter that implements:</p>
+                    <ul>
+                        <li>Code parser for the language</li>
+                        <li>Dependency resolver</li>
+                        <li>Execution environment</li>
+                        <li>Error formatter</li>
+                    </ul>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Example: JavaScript Adapter</h3>
+                    <div class="code-block">
+                        // litpro-js-adapter.js<br>
+                        export class JavaScriptAdapter {<br>
+                        &nbsp;&nbsp;parse(code) { /* parse JS code */ }<br>
+                        &nbsp;&nbsp;execute(code, context) { /* execute JS */ }<br>
+                        &nbsp;&nbsp;resolveDependencies(cells) { /* resolve deps */ }<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="syntax-card">
+                    <h3>Supported Languages</h3>
+                    <p>Planned adapters for:</p>
+                    <ul>
+                        <li>JavaScript/TypeScript</li>
+                        <li>Rust</li>
+                        <li>Go</li>
+                        <li>Julia</li>
+                        <li>R</li>
+                        <li>C/C++</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p>The same literate programming principles apply across all languages, making it easy to switch between ecosystems while maintaining the same workflow.</p>
         </div>
     </section>
     
@@ -549,19 +657,19 @@ print("STFT function defined")
     </footer>
     
     <script>
-        async function runLPMD() {
-            const input = document.getElementById('lpmd-input').value;
-            const output = document.getElementById('lpmd-output');
+        async function runLitPro() {
+            const input = document.getElementById('litpro-input').value;
+            const output = document.getElementById('litpro-output');
             
             // Clear output area
-            output.value = 'Executing with the actual LPMD system...\n';
+            output.value = 'Executing with the actual LitPro system...\n';
             
             try {
                 // In a real deployment, this would call the backend service
                 // For now, we'll simulate it since GitHub Pages is static
-                output.value += 'Connecting to LPMD execution service...\n\n';
+                output.value += 'Connecting to LitPro execution service...\n\n';
                 
-                // Parse LPMD syntax to extract cells
+                // Parse LitPro syntax to extract cells
                 const cellPattern = /<!--\s*cell:([^>\s]+)([^>]*)?-->[\s\n]*```python([\s\S]*?)```/g;
                 const cells = [];
                 let match;
@@ -589,7 +697,7 @@ print("STFT function defined")
                 }
                 
                 if (cells.length === 0) {
-                    output.value = "No LPMD cells found in the input.";
+                    output.value = "No LitPro cells found in the input.";
                     return;
                 }
                 
@@ -603,7 +711,7 @@ print("STFT function defined")
                 
                 // Simulate what would happen with the actual system
                 output.value += `Found ${cells.length} cells with dependencies. In a real deployment,\n`;
-                output.value += `this would execute: python lpmd_executor.py temp_file.lpmd\n\n`;
+                output.value += `this would execute: python litpro_executor.py temp_file.lit\n\n`;
                 
                 for (const cellId of executionOrder) {
                     const cell = cells.find(c => c.id === cellId);
@@ -641,7 +749,7 @@ print("STFT function defined")
                 
                 output.value += "\n--- Execution completed ---\n";
                 output.value += "\nTo run this with the actual system:\n";
-                output.value += "1. Deploy the LPMD runner service\n";
+                output.value += "1. Deploy the LitPro runner service\n";
                 output.value += "2. Update the API endpoint in the script\n";
                 output.value += "3. Execute with full Python interpreter access\n";
                 
