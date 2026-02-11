@@ -13,7 +13,6 @@ maintainers = [
     {name = "Abhishek Shivakumar", email = "abhishek@example.com"},
 ]
 description = "Literate Python Markdown - A revolutionary literate programming framework"
-readme = "README.md"
 license = {text = "MIT"}
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -48,5 +47,5 @@ where = ["src"]
 
 [tool.setuptools.dynamic]
 version = {attr = "src.core.lpmd_executor.__version__"}
-readme = {file = ["README.md"], content-type = "text/markdown"}
+readme = {file = "README.md", content-type = "text/markdown"}
 dependencies = {file = ["requirements.txt"]}
