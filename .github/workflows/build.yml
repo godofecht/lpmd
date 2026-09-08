@@ -23,7 +23,7 @@ jobs:
       run: |
         python -m build
     - name: Archive Python package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: python-package
         path: dist/
@@ -41,7 +41,7 @@ jobs:
         julia --project=julia -e 'using Pkg; Pkg.instantiate()'
         julia --project=julia julia/LitPro.jl
     - name: Archive Julia package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: julia-package
         path: julia/
@@ -60,7 +60,7 @@ jobs:
         npm init -y
         npm pack
     - name: Archive JavaScript package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: javascript-package
         path: js/*.tgz
@@ -76,7 +76,7 @@ jobs:
         cd rust
         rustc --crate-type lib LitPro.rs -o liblitpro.rlib
     - name: Archive Rust package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: rust-package
         path: rust/
