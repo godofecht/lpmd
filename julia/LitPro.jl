@@ -1,50 +1,46 @@
 #!/usr/bin/env julia
 
-using ArgParse
+using LitPro
 
-function parse_commandline()
-    s = ArgParseSettings(prog="litpro", description="LitPro - Literate Programming Framework for Julia")
-
-    @add_arg_table s begin
-        "command"
-            help = "Command to execute (run, export, html)"
-            arg_type = String
-            required = true
-        "file"
-            help = "Path to the literate programming file (.lit)"
-            arg_type = String
-            required = true
-        "--output", "-o"
-            help = "Output file path (for export/html commands)"
-            arg_type = String
-    end
-
-    return parse_args(s)
+function usage(io::IO=stdout)
+    println(io, "Usage: julia --project=julia julia/LitPro.jl <run|export|html> <file> [-o output]")
 end
 
-# Include the LitPro module
-include("LitPro.jl")
-using .LitPro
+function main(args=ARGS)
+    if length(args) < 2
+        usage(stderr)
+        return 2
+    end
 
-function main()
-    parsed_args = parse_commandline()
-    
-    command = parsed_args["command"]
-    file = parsed_args["file"]
-    output = parsed_args["output"]
-    
+    command = args[1]
+    file = args[2]
+    output = nothing
+
+    i = 3
+    while i <= length(args)
+        if args[i] == "-o" || args[i] == "--output"
+            i == length(args) && error("missing value after $(args[i])")
+            output = args[i + 1]
+            i += 2
+        else
+            error("unknown argument: $(args[i])")
+        end
+    end
+
     if command == "run"
         run_litpro(file)
     elseif command == "export"
-        output_file = output !== nothing ? output : replace(file, ".lit" => ".jl")
-        export_litpro(file, output_file)
+        export_litpro(file, output === nothing ? replace(file, r"\.lit$" => ".jl") : output)
     elseif command == "html"
-        output_file = output !== nothing ? output : replace(file, ".lit" => ".html")
-        html_litpro(file, output_file)
+        html_litpro(file, output === nothing ? replace(file, r"\.lit$" => ".html") : output)
     else
-        println("Unknown command: \$command")
-        println("Available commands: run, export, html")
+        usage(stderr)
+        error("unknown command: $command")
     end
+
+    return 0
 end
 
-main()
+if abspath(PROGRAM_FILE) == @__FILE__
+    exit(main())
+end

@@ -39,13 +39,13 @@ Repository = "https://github.com/godofecht/lpmd"
 Changelog = "https://github.com/godofecht/lpmd/releases"
 
 [project.scripts]
-lpmd-execute = "src.core.lpmd_executor:main"
-lpmd-generate-html = "src.core.lpmd_html_generator:main"
+lpmd-execute = "core.lpmd_executor:main"
+lpmd-generate-html = "core.lpmd_html_generator:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.dynamic]
-version = {attr = "src.core.lpmd_executor.__version__"}
+version = {attr = "core.__version__"}
 readme = {file = "README.md", content-type = "text/markdown"}
 dependencies = {file = ["requirements.txt"]}

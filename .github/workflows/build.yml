@@ -12,16 +12,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.13'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build twine
+        python -m pip install build twine
     - name: Build package
       run: |
         python -m build
+        python -m twine check dist/*
     - name: Archive Python package
       uses: actions/upload-artifact@v4
       with:
@@ -38,8 +39,8 @@ jobs:
         version: '1.8'
     - name: Build Julia package
       run: |
-        julia --project=julia -e 'using Pkg; Pkg.instantiate()'
-        julia --project=julia julia/LitPro.jl
+        julia --project=julia -e 'using Pkg; Pkg.instantiate(); using LitPro; LitPro.export_litpro("julia/example.lit", "/tmp/example.jl")'
+        test -s /tmp/example.jl
     - name: Archive Julia package
       uses: actions/upload-artifact@v4
       with:
